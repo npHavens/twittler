@@ -31,6 +31,12 @@
     }
     .tweet {
       padding-top: 20px;
+      
+    }
+
+    #new-tweets-inner > .tweet {
+      cursor: pointer;
+      padding-top: 15px;
     }
     #title {
       font-family: 'Libre Franklin 700', sans-serif;
@@ -49,7 +55,7 @@
       vertical-align: top;
     }
     #user-title {
-      margin-top: 18px;
+      margin-top: 18Apx;
       margin-bottom: 20px;
       text-align: center;
       font-size: 20px;
@@ -117,6 +123,7 @@
         var tweetloader = loadTweets($newTweets);
 
         //setInterval(tweetloader, 15);
+
 
         $('.tweet').on('click', function() {
           var userFeed = $('#user-feed-inner');
