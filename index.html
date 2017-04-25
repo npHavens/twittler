@@ -13,21 +13,19 @@
       font-size: 18px;
     }
     .time-stamp {
-      font-size: 14px;
+      font-size: 12px;
+      padding-left: 50px;
      
-    }
-    #new-tweets {
-      
     }
 
     #new-tweets-outer, #user-feed-outer {
-      display: block;
+      display: inline-block;
       width: 40%;
       margin-left: auto;
       margin-right: auto;
       border: 1px solid black;
       border-radius: 20px;
-      padding: 10px 10px 30px 30px;
+     
     }
     .tweet {
       padding-top: 20px;
@@ -36,7 +34,7 @@
 
     #new-tweets-inner > .tweet {
       cursor: pointer;
-      padding-top: 15px;
+
     }
     #title {
       font-family: 'Libre Franklin 700', sans-serif;
@@ -48,21 +46,27 @@
       margin-bottom: 20px;
     }
     #user-feed-outer {
-      display: none;
-      width: 25%;
+      opacity: 0;
+      display: inline-block;
+      width: 29.5%;
       font-size: 15px;
-     
       vertical-align: top;
     }
     #user-title {
-      margin-top: 18Apx;
-      margin-bottom: 20px;
+      margin-top: 18px;
+      padding-bottom: 20px;
       text-align: center;
       font-size: 20px;
+      border-bottom: 1px solid black;
     }
     #user-feed-inner {
       max-height: 1021px;
       overflow-y: auto;
+    }
+    #nav-bar {
+      margin; 0;
+      height: 50px;
+      border-bottom: 1px solid black;
     }
    
   </style>
@@ -74,6 +78,7 @@
       <div id="user-feed-inner"></div>
     </div>
     <div id="new-tweets-outer">
+      <div id="nav-bar"></div>
       <div id="new-tweets-inner"></div>
     </div>
 
@@ -133,13 +138,11 @@
           $('#user-title').text('@' + userName);
           userFeed.empty();
 
-          for (var i = tweetCount -1; i > 0; i--) {
-           
+          for (var i = tweetCount -1; i > 0; i--) {           
              var currentTweet = streams.users[userName][i];
              buildTweetElement(currentTweet).appendTo(userFeed);
           }
-          $('#user-feed-outer').css('display', 'inline-block');
-          $('#new-tweets-outer').css('display', 'inline-block');
+          $('#user-feed-outer').css('opacity', 1);
         });
 
       });
