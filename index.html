@@ -4,43 +4,76 @@
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
     <script src="moment.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Libre+Franklin" rel="stylesheet">
   </head>
+
+  <style>
+  body {
+    font-family: 'Libre Franklin', sans-serif;
+    color: grey;
+    font-size: 20px;
+  }
+
+  #time-stamp {
+    font-size: 14px;
+    display: block;
+  }
+  #new-tweets {
+    display: block;
+  }
+  #new-tweets-outer {
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+  </style>
+
   <body>
+    <div id="new-tweets-outer">
+      <div id="new-tweets"> </div>
+    </div>
+
+
     <script>
       function addTimeStamp(tweetObj, node) {
-        return $('<a id="time-stamp"> ' + moment(tweetObj.created_at).format('MMMM Do YYYY, h:mm:ss a') + '</a>').appendTo(node); 
+        return $('<a id="time-stamp"> ' + moment(tweetObj.created_at)
+          .format('MMMM Do YYYY, h:mm:ss a') + '</a>').appendTo(node); 
+      }
+
+      function loadTweets(node) {
+        var length = streams.home.length;
+
+        return function() {
+          if (streams.home.length > length) {
+            var newTweetObj = streams.home[streams.home.length - 1];
+            var $lastTweet =  node.find('div:first');           
+            var $newTweet = $('<div></div>').text('@' + newTweetObj.user + ': ' + newTweetObj.message);
+
+            addTimeStamp(newTweetObj, $newTweet);              
+            $lastTweet.before($newTweet);
+            length = streams.home.length;
+            node.find('div:last').remove();
+          }
+        };
       }
 
       $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
+        var $newTweets = $('#new-tweets');
         var index = streams.home.length - 1;
         while(index >= 0){
-          var tweet = streams.home[index];
+          var tweetObj = streams.home[index];
           var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          addTimeStamp(tweet, $tweet);
-          $tweet.appendTo($body);
+          $tweet.text('@' + tweetObj.user + ': ' + tweetObj.message);
+          addTimeStamp(tweetObj, $tweet);
+          $tweet.appendTo($newTweets);
           index -= 1;
         }
 
-        function loadTweets() {
-          var length = streams.home.length;
-          return function() {
-            if (streams.home.length > length) {
-              var currentTweet = streams.home[streams.home.length - 1];
-              length = streams.home.length;
-              $('body').find('div:first').before($('<div></div>')
-                .text('@' + currentTweet.user + ': ' + currentTweet.message));
-              addTimeStamp(currentTweet,  $('body').find('div:first'));
-              $('body').find('div:last').remove();
-            }
-          };
-        }
+        var tweetloader = loadTweets($newTweets);
 
-        var tweetloader = loadTweets();
-
-        setInterval(tweetloader, 15);
+        //setInterval(tweetloader, 15);
 
       });
 
