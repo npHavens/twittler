@@ -14,7 +14,7 @@
     font-size: 20px;
   }
 
-  #time-stamp {
+  .time-stamp {
     font-size: 14px;
     display: block;
   }
@@ -26,7 +26,12 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 30px;
+  }
+  .tweet {
+    padding-top: 20px;
   }
   </style>
 
@@ -38,7 +43,7 @@
 
     <script>
       function addTimeStamp(tweetObj, node) {
-        return $('<a id="time-stamp"> ' + moment(tweetObj.created_at)
+        return $('<a class="time-stamp"> ' + moment(tweetObj.created_at)
           .format('MMMM Do YYYY, h:mm:ss a') + '</a>').appendTo(node); 
       }
 
@@ -49,7 +54,7 @@
           if (streams.home.length > length) {
             var newTweetObj = streams.home[streams.home.length - 1];
             var $lastTweet =  node.find('div:first');           
-            var $newTweet = $('<div></div>').text('@' + newTweetObj.user + ': ' + newTweetObj.message);
+            var $newTweet = $('<div class="tweet"></div>').text('@' + newTweetObj.user + ': ' + newTweetObj.message);
 
             addTimeStamp(newTweetObj, $newTweet);              
             $lastTweet.before($newTweet);
@@ -64,7 +69,7 @@
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweetObj = streams.home[index];
-          var $tweet = $('<div></div>');
+          var $tweet = $('<div class="tweet"></div>');
           $tweet.text('@' + tweetObj.user + ': ' + tweetObj.message);
           addTimeStamp(tweetObj, $tweet);
           $tweet.appendTo($newTweets);
