@@ -3,9 +3,13 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <script src="moment.min.js"></script>
   </head>
   <body>
     <script>
+      function addTimeStamp(tweetObj, node) {
+        return $('<a id="time-stamp"> ' + moment(tweetObj.created_at).format('MMMM Do YYYY, h:mm:ss a') + '</a>').appendTo(node); 
+      }
 
       $(document).ready(function(){
         var $body = $('body');
@@ -15,6 +19,7 @@
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
           $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          addTimeStamp(tweet, $tweet);
           $tweet.appendTo($body);
           index -= 1;
         }
@@ -25,7 +30,9 @@
             if (streams.home.length > length) {
               var currentTweet = streams.home[streams.home.length - 1];
               length = streams.home.length;
-              $('body').find('div:first').before($('<div></div>').text('@' + currentTweet.user + ': ' + currentTweet.message));
+              $('body').find('div:first').before($('<div></div>')
+                .text('@' + currentTweet.user + ': ' + currentTweet.message));
+              addTimeStamp(currentTweet,  $('body').find('div:first'));
               $('body').find('div:last').remove();
             }
           };
