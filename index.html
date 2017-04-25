@@ -7,60 +7,84 @@
     <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:100,300,400,500,600,700,800,900" rel="stylesheet">
 
   <style>
-  body {
-    font-family: 'Libre Franklin', sans-serif;
-    color: grey;
-    font-size: 20px;
-  }
-  .time-stamp {
-    font-size: 14px;
-    display: block;
-  }
-  #new-tweets {
-    display: block;
-  }
-  #new-tweets-outer {
-    width: 50%;
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 10px 10px 30px 30px;
-  }
-  .tweet {
-    padding-top: 20px;
-  }
-  #title {
-    font-family:  'Libre Franklin 700', sans-serif;
-    font-size: 70px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 40px;
-    margin-bottom: 20px;
-  }
+    body {
+      font-family: 'Libre Franklin', sans-serif;
+      color: grey;
+      font-size: 18px;
+    }
+    .time-stamp {
+      font-size: 14px;
+     
+    }
+    #new-tweets {
+      
+    }
+
+    #new-tweets-outer, #user-feed-outer {
+      display: block;
+      width: 40%;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid black;
+      border-radius: 20px;
+      padding: 10px 10px 30px 30px;
+    }
+    .tweet {
+      padding-top: 20px;
+    }
+    #title {
+      font-family: 'Libre Franklin 700', sans-serif;
+      font-size: 70px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    #user-feed-outer {
+      display: none;
+      width: 25%;
+      font-size: 15px;
+     
+      vertical-align: top;
+    }
+    #user-title {
+      margin-top: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 20px;
+    }
+    #user-feed-inner {
+      max-height: 1021px;
+      overflow-y: auto;
+    }
+   
   </style>
 
-  <p id="title">Twittler</p>
+  <div id="title">Twittler</div>
   <body>
-    <div id="user-feed"></div>
+    <div id="user-feed-outer">
+      <div id="user-title"></div>
+      <div id="user-feed-inner"></div>
+    </div>
     <div id="new-tweets-outer">
-      <div id="new-tweets"> </div>
+      <div id="new-tweets-inner"></div>
     </div>
 
 
     <script>
       function buildTweetElement(tweetObj, showUserName) {
         var tweetElement = $('<div class="tweet"></div>')
-        .text((showUserName ? '@' + tweetObj.user + ': ' : '') + tweetObj.message);
+        .text((showUserName ? '@' + tweetObj.user + ': ' : '') + tweetObj.message)
+        .data("user-name", tweetObj.user)
+
         addTimeStamp(tweetObj, tweetElement);
         return tweetElement;
       }
 
       function addTimeStamp(tweetObj, node) {
-        return $('<a class="time-stamp"> ' + moment(tweetObj.created_at)
-          .format('MMMM Do YYYY, h:mm:ss a') + '</a>').appendTo(node); 
+        return $('<p class="time-stamp"> ' + moment(tweetObj.created_at)
+          .format('MMMM Do YYYY, h:mm:ss a') + '</p>').appendTo(node); 
       }
 
       function loadTweets(node) {
@@ -80,7 +104,7 @@
       }
 
       $(document).ready(function(){
-        var $newTweets = $('#new-tweets');
+        var $newTweets = $('#new-tweets-inner');
         var index = streams.home.length - 1;
 
         while(index >= 0){
@@ -92,10 +116,23 @@
 
         var tweetloader = loadTweets($newTweets);
 
-        setInterval(tweetloader, 15);
+        //setInterval(tweetloader, 15);
 
         $('.tweet').on('click', function() {
-          console.log($(this))
+          var userFeed = $('#user-feed-inner');
+          var userName = $(this).data("user-name");
+          var tweetCount = streams.users[userName].length;
+
+          $('#user-title').text('@' + userName);
+          userFeed.empty();
+
+          for (var i = tweetCount -1; i > 0; i--) {
+           
+             var currentTweet = streams.users[userName][i];
+             buildTweetElement(currentTweet).appendTo(userFeed);
+          }
+          $('#user-feed-outer').css('display', 'inline-block');
+          $('#new-tweets-outer').css('display', 'inline-block');
         });
 
       });
