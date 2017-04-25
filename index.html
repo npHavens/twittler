@@ -10,7 +10,6 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
-
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
@@ -19,6 +18,22 @@
           $tweet.appendTo($body);
           index -= 1;
         }
+
+        function loadTweets() {
+          var length = streams.home.length;
+          return function() {
+            if (streams.home.length > length) {
+              var currentTweet = streams.home[streams.home.length - 1];
+              length = streams.home.length;
+              $('body').find('div:first').before($('<div></div>').text('@' + currentTweet.user + ': ' + currentTweet.message));
+              $('body').find('div:last').remove();
+            }
+          };
+        }
+
+        var tweetloader = loadTweets();
+
+        setInterval(tweetloader, 15);
 
       });
 
