@@ -92,6 +92,9 @@
 
 
     <script>
+     
+      $(document).ready(function(){
+
       function appendNewTweets(stream, node, showUserName) {
         var index = stream.length - 1;
 
@@ -129,15 +132,30 @@
             $lastTweet.before($newTweet);
             length = streams.home.length;
             node.find('div:last').remove();
-          }
-        };
+          };
+        }
       }
 
-      $(document).ready(function(){
-        var $newFeed = $('#new-tweets-inner');
-        appendNewTweets(streams.home, $newFeed, true);
+      // function toggleLiveFeed(loader, node, stream) {
+      //   var isLive = false;
+      //   //var interval = setInterval(loader, 15);
 
-        var tweetloader = loadLiveTweets($newFeed);
+      //   return function() {
+      //     console.log(isLive, interval)
+      //     if (isLive) {
+      //       clearInterval(interval);
+      //       node.empty();
+      //       appendNewTweets(stream, node, true);
+      //       isLive = false;
+      //     } else {
+      //      var interval = setInterval(loader, 15);
+      //      isLive = true;
+      //     }
+      //   }
+      // }
+
+        var $newFeed = $('#new-tweets-inner');
+        appendNewTweets(streams.home, $newFeed, true);     
 
         $('.tweet').on('click', function() {
           var $userFeed = $('#user-feed-inner');
@@ -156,9 +174,20 @@
           appendNewTweets(newestTen, $newFeed, true);
         });
 
-        // $('#live-feed').on('click', function() {
-        //   setInterval(tweetloader, 15);
-        // })
+        //var liveToggler = toggleLiveFeed(tweetloader, $newFeed, streams.home.slice(-10))
+         var tweetLoader = loadLiveTweets($newFeed);
+
+        $('#live-feed').on('click', function() {
+          if ($(this).hasClass('live')) {
+            console.log(interval)
+            clearInterval($(this).data('intervalId'));
+            $(this).removeClass('live');
+          } else {
+            var interval = setInterval(tweetLoader, 15);
+            $(this).addClass('live');
+            $(this).data('intervalId', interval);
+          }
+        })
 
       });
 
