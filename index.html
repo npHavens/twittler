@@ -84,7 +84,7 @@
     </div>
     <div id="new-tweets-outer">
       <div id="nav-bar">
-        <button id="go-live">Live Feed</button>
+        <button id="live-feed">Live Feed</button>
         <button id="get-new">Get New Tweets</button>
       </div>
       <div id="new-tweets-inner"></div>
@@ -117,7 +117,7 @@
           .format('MMMM Do YYYY, h:mm:ss a') + '</p>').appendTo(node); 
       }
 
-      function loadTweets(node) {
+      function loadLiveTweets(node) {
         var length = streams.home.length;
 
         return function() {
@@ -134,12 +134,10 @@
       }
 
       $(document).ready(function(){
-        var $newTweets = $('#new-tweets-inner');
-        appendNewTweets(streams.home, $newTweets, true);
+        var $newFeed = $('#new-tweets-inner');
+        appendNewTweets(streams.home, $newFeed, true);
 
-        var tweetloader = loadTweets($newTweets);
-
-        //setInterval(tweetloader, 15);
+        var tweetloader = loadLiveTweets($newFeed);
 
         $('.tweet').on('click', function() {
           var $userFeed = $('#user-feed-inner');
@@ -152,12 +150,15 @@
           $('#user-feed-outer').css('opacity', 1);
         });
 
-        // $("#get-new").on('click', function() {
-        //   var $newFeed = $('#new-tweets-inner');
-        //   var newestTen = streams.home.slice(-10);
-        //   $newFeed.empty();
-        //   newset
-        // });
+        $('#get-new').on('click', function() {
+          var newestTen = streams.home.slice(-10);
+          $newFeed.empty();
+          appendNewTweets(newestTen, $newFeed, true);
+        });
+
+        // $('#live-feed').on('click', function() {
+        //   setInterval(tweetloader, 15);
+        // })
 
       });
 
