@@ -58,7 +58,7 @@
       border-bottom: 1px solid black;
     }
     #user-feed-inner {
-      max-height: 1021px;
+      max-height: px;
       overflow-y: auto;
     }
     #nav-bar {
@@ -152,7 +152,7 @@
       $(document).ready(function(){
 
         var $newFeed = $('#new-tweets-inner');
-        appendNewTweets(streams.home, $newFeed, true);
+        appendNewTweets(streams.home.slice(-10), $newFeed, true);
 
         $('#get-new').on('click', function() {
           var newestTen = streams.home.slice(-10);
