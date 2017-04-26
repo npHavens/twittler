@@ -131,7 +131,8 @@
             
             $lastTweet.before($newTweet);
             length = streams.home.length;
-            node.find('div:last').remove();
+            console.log(node.find('div:last'))
+            node.find('.tweet:last').remove();
           };
         }
       }
