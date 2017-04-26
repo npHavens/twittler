@@ -26,9 +26,7 @@
       border-radius: 20px;
     }
     .tweet {
-      padding-top: 20px;
-      padding-left: 30px;
-      padding-right: 30px;
+      padding: 20px 30px 10px 30px;
       
     }
 
@@ -93,8 +91,6 @@
 
     <script>
      
-      $(document).ready(function(){
-
       function appendNewTweets(stream, node, showUserName) {
         var index = stream.length - 1;
 
@@ -112,12 +108,14 @@
         .data("user-name", tweetObj.user)
 
         addTimeStamp(tweetObj, tweetElement);
+        tweetElement.on('click', function() {
+          showUserFeed($(this));
+        });
         return tweetElement;
       }
 
       function addTimeStamp(tweetObj, node) {
-        return $('<p class="time-stamp"> ' + moment(tweetObj.created_at)
-          .format('MMMM Do YYYY, h:mm:ss a') + '</p>').appendTo(node); 
+        return $('<div class="time-stamp"> ' + moment(tweetObj.created_at).fromNow() + '</div>').appendTo(node); 
       }
 
       function loadLiveTweets(node) {
@@ -136,37 +134,22 @@
         }
       }
 
-      // function toggleLiveFeed(loader, node, stream) {
-      //   var isLive = false;
-      //   //var interval = setInterval(loader, 15);
+      function showUserFeed($element) {
+        console.log('clicked');
+        var $userFeed = $('#user-feed-inner');
+        var $userName = $element.data("user-name");
+        var tweetCount = streams.users[$userName].length;
 
-      //   return function() {
-      //     console.log(isLive, interval)
-      //     if (isLive) {
-      //       clearInterval(interval);
-      //       node.empty();
-      //       appendNewTweets(stream, node, true);
-      //       isLive = false;
-      //     } else {
-      //      var interval = setInterval(loader, 15);
-      //      isLive = true;
-      //     }
-      //   }
-      // }
+        $('#user-title').text('@' + $userName);
+        $userFeed.empty();
+        appendNewTweets(streams.users[$userName], $userFeed);
+        $('#user-feed-outer').css('opacity', 1);
+      }
+
+      $(document).ready(function(){
 
         var $newFeed = $('#new-tweets-inner');
-        appendNewTweets(streams.home, $newFeed, true);     
-
-        $('.tweet').on('click', function() {
-          var $userFeed = $('#user-feed-inner');
-          var $userName = $(this).data("user-name");
-          var tweetCount = streams.users[$userName].length;
-
-          $('#user-title').text('@' + $userName);
-          $userFeed.empty();
-          appendNewTweets(streams.users[$userName], $userFeed)
-          $('#user-feed-outer').css('opacity', 1);
-        });
+        appendNewTweets(streams.home, $newFeed, true);
 
         $('#get-new').on('click', function() {
           var newestTen = streams.home.slice(-10);
@@ -174,18 +157,19 @@
           appendNewTweets(newestTen, $newFeed, true);
         });
 
-        //var liveToggler = toggleLiveFeed(tweetloader, $newFeed, streams.home.slice(-10))
          var tweetLoader = loadLiveTweets($newFeed);
 
         $('#live-feed').on('click', function() {
           if ($(this).hasClass('live')) {
-            console.log(interval)
             clearInterval($(this).data('intervalId'));
             $(this).removeClass('live');
+            $(this).css('background-color', 'white');
+
           } else {
             var interval = setInterval(tweetLoader, 15);
             $(this).addClass('live');
             $(this).data('intervalId', interval);
+            $(this).css('background-color', 'green');
           }
         })
 
