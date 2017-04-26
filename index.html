@@ -68,6 +68,11 @@
       height: 50px;
       border-bottom: 1px solid black;
     }
+    button {
+      float: right;
+      margin-top: 16px;
+      margin-right: 20px;
+    }
    
   </style>
 
@@ -78,12 +83,26 @@
       <div id="user-feed-inner"></div>
     </div>
     <div id="new-tweets-outer">
-      <div id="nav-bar"></div>
+      <div id="nav-bar">
+        <button id="go-live">Live Feed</button>
+        <button id="get-new">Get New Tweets</button>
+      </div>
       <div id="new-tweets-inner"></div>
     </div>
 
 
     <script>
+      function appendNewTweets(stream, node, showUserName) {
+        var index = stream.length - 1;
+
+        while(index >= 0) {
+          var tweetObj = stream[index];
+          var $tweet = buildTweetElement(tweetObj, showUserName);
+          $tweet.appendTo(node);
+          index--;
+        }
+      }
+
       function buildTweetElement(tweetObj, showUserName) {
         var tweetElement = $('<div class="tweet"></div>')
         .text((showUserName ? '@' + tweetObj.user + ': ' : '') + tweetObj.message)
@@ -116,34 +135,29 @@
 
       $(document).ready(function(){
         var $newTweets = $('#new-tweets-inner');
-        var index = streams.home.length - 1;
-
-        while(index >= 0){
-          var tweetObj = streams.home[index];
-          var $tweet = buildTweetElement(tweetObj, true);
-          $tweet.appendTo($newTweets);
-          index -= 1;
-        }
+        appendNewTweets(streams.home, $newTweets, true);
 
         var tweetloader = loadTweets($newTweets);
 
         //setInterval(tweetloader, 15);
 
-
         $('.tweet').on('click', function() {
-          var userFeed = $('#user-feed-inner');
-          var userName = $(this).data("user-name");
-          var tweetCount = streams.users[userName].length;
+          var $userFeed = $('#user-feed-inner');
+          var $userName = $(this).data("user-name");
+          var tweetCount = streams.users[$userName].length;
 
-          $('#user-title').text('@' + userName);
-          userFeed.empty();
-
-          for (var i = tweetCount -1; i > 0; i--) {           
-             var currentTweet = streams.users[userName][i];
-             buildTweetElement(currentTweet).appendTo(userFeed);
-          }
+          $('#user-title').text('@' + $userName);
+          $userFeed.empty();
+          appendNewTweets(streams.users[$userName], $userFeed)
           $('#user-feed-outer').css('opacity', 1);
         });
+
+        // $("#get-new").on('click', function() {
+        //   var $newFeed = $('#new-tweets-inner');
+        //   var newestTen = streams.home.slice(-10);
+        //   $newFeed.empty();
+        //   newset
+        // });
 
       });
 
