@@ -115,7 +115,9 @@
       }
 
       function addTimeStamp(tweetObj, node) {
-        return $('<div class="time-stamp"> ' + moment(tweetObj.created_at).fromNow() + '</div>').appendTo(node); 
+        var timeStamp = $('<div class="time-stamp"></div>');
+        timeStamp.text(moment(tweetObj.created_at).fromNow() + ' - ' + tweetObj.created_at);
+        timeStamp.appendTo(node);
       }
 
       function loadLiveTweets(node) {
