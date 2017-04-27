@@ -11,6 +11,7 @@
       font-family: 'Libre Franklin', sans-serif;
       color: grey;
       font-size: 18px;
+      margin: 0px;
     }
     .time-stamp {
       font-size: 12px;
@@ -22,8 +23,9 @@
       display: inline-block;
       width: 50%;
       margin-left: 30px;
-      border: 1px solid black;
+      border: 2px solid #59bc69;
       border-radius: 20px;
+      padding-bottom: 20px;
     }
     .tweet {
       padding: 20px 30px 10px 30px;
@@ -35,12 +37,14 @@
 
     }
     #title {
+      background-color: #59bc69;
+      color: white;
       font-family: 'Libre Franklin 700', sans-serif;
       font-size: 70px;
       text-align: center;
       margin-left: auto;
       margin-right: auto;
-      margin-top: 40px;
+      
       margin-bottom: 20px;
     }
     #user-feed-outer {
@@ -55,7 +59,7 @@
       padding-bottom: 20px;
       text-align: center;
       font-size: 20px;
-      border-bottom: 1px solid black;
+      border-bottom: 2px solid #59bc69;
     }
     #user-feed-inner {
       max-height: 650px;
@@ -63,18 +67,35 @@
     }
     #nav-bar {
       margin: 0;
-      height: 50px;
-      border-bottom: 1px solid black;
+      height: 70px;
+      border-bottom: 2px solid #59bc69;
     }
-    button {
+    .button {
+      display: inline-block;
+      color: grey;
+      padding: 12px 20px 0px 20px;
       float: right;
-      margin-top: 16px;
+      margin-top: 12px;
       margin-right: 20px;
+
+      border-radius: 30px;
+      height: 30px;
+      font-family: 'Libre Franklin 800', sans-serif;
+      font-size: 14px;
+      background-color: white;
+      border: 2px solid #59bc69;
+    }
+    #nav-title{
+      display: inline-block;
+      width: 200px;
+      margin-left: 100px;
+      margin-top: 20px;
+      font-size: 24px;
     }
    
   </style>
 
-  <div id="title">Twittler</div>
+  <header id="title">Twittler</header>
   <body>
     <div id="user-feed-outer">
       <div id="user-title"></div>
@@ -82,8 +103,9 @@
     </div>
     <div id="new-tweets-outer">
       <div id="nav-bar">
-        <button id="live-feed">Live Feed</button>
-        <button id="get-new">Get New Tweets</button>
+        <div id="nav-title">News Feed</div>
+        <div class="button" id="live-feed">Live Feed</div>
+        <div class="button" id="get-new">Get New Tweets</div>
       </div>
       <div id="new-tweets-inner"></div>
     </div>
@@ -138,7 +160,6 @@
       }
 
       function showUserFeed($element) {
-        console.log('clicked');
         var $userFeed = $('#user-feed-inner');
         var $userName = $element.data("user-name");
         var tweetCount = streams.users[$userName].length;
@@ -166,13 +187,13 @@
           if ($(this).hasClass('live')) {
             clearInterval($(this).data('intervalId'));
             $(this).removeClass('live');
-            $(this).css('background-color', 'white');
+            $(this).css({"color": "grey", "background-color": "white"});
 
           } else {
             var interval = setInterval(tweetLoader, 15);
             $(this).addClass('live');
             $(this).data('intervalId', interval);
-            $(this).css('background-color', 'green');
+            $(this).css({"color": "white", "background-color": "#59bc69"});
           }
         })
 
