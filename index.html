@@ -2,8 +2,10 @@
 <html>
   <head>
     <script src="jquery.js"></script>
+    <script src="jquery.animate-colors-min.js"></script>
     <script src="data_generator.js"></script>
     <script src="moment.min.js"></script>
+   
     <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:100,300,400,500,600,700,800,900" rel="stylesheet">
 
   <style>
@@ -73,7 +75,7 @@
     .button {
       display: inline-block;
       color: grey;
-      padding: 12px 20px 0px 20px;
+      padding: 13px 20px 0px 20px;
       float: right;
       margin-top: 12px;
       margin-right: 20px;
@@ -84,6 +86,7 @@
       font-size: 14px;
       background-color: white;
       border: 2px solid #59bc69;
+      cursor: pointer;
     }
     #nav-title{
       display: inline-block;
@@ -153,7 +156,6 @@
             
             $lastTweet.before($newTweet);
             length = streams.home.length;
-            console.log(node.find('div:last'))
             node.find('.tweet:last').remove();
           };
         }
@@ -164,10 +166,11 @@
         var $userName = $element.data("user-name");
         var tweetCount = streams.users[$userName].length;
 
+        $('#user-feed-outer').css({'opacity': '0'});
         $('#user-title').text('@' + $userName);
         $userFeed.empty();
         appendNewTweets(streams.users[$userName], $userFeed);
-        $('#user-feed-outer').css('opacity', 1);
+        $('#user-feed-outer').animate({'opacity': '1'}, 'fast');
       }
 
       $(document).ready(function(){
@@ -196,6 +199,17 @@
             $(this).css({"color": "white", "background-color": "#59bc69"});
           }
         })
+
+        $('.button').on('mouseenter', function() {
+          $(this).animate({'background-color': '#59bc69', 'color': 'white'}, 'fast');
+
+        });
+
+        $('.button').on('mouseleave', function() {
+          if (!$(this).hasClass('live')) {
+            $(this).animate({'background-color': 'white', 'color': '#59bc69'}, 'fast');
+          }
+        });
 
       });
 
