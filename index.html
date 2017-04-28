@@ -135,9 +135,20 @@
         .data("user-name", tweetObj.user)
 
         addTimeStamp(tweetObj, tweetElement);
-        tweetElement.on('click', function() {
+
+        if (showUserName) {
+          tweetElement.on('click', function() {
           showUserFeed($(this));
-        });
+          });
+
+          tweetElement.on('mouseenter', function() {
+            $(this).css({'color': '#59bc69'}, 'fast');
+          });
+
+          tweetElement.on('mouseleave', function() {
+            $(this).css({'color': '#7f7f7f'});
+          });
+        }
         return tweetElement;
       }
 
@@ -211,13 +222,6 @@
           }
         });
 
-        $('.tweet').on('mouseenter', function() {
-          $(this).css({'color': '#59bc69'}, 'fast');
-        });
-
-        $('.tweet').on('mouseleave', function() {
-            $(this).css({'color': '#7f7f7f'});
-        });
 
       });
 
