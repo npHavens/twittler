@@ -18,7 +18,6 @@
     .time-stamp {
       font-size: 12px;
       padding-left: 50px;
-     
     }
 
     #new-tweets-outer, #user-feed-outer {
@@ -63,6 +62,7 @@
       text-align: center;
       font-size: 20px;
       border-bottom: 2px solid #59bc69;
+      font-weight: 500;
     }
     #user-feed-inner {
       max-height: 650px;
@@ -76,7 +76,7 @@
     .button {
       display: inline-block;
       color: #7f7f7f;
-      padding: 13px 20px 0px 20px;
+      padding: 10px 20px 0px 20px;
       float: right;
       margin-top: 12px;
       margin-right: 20px;
@@ -91,11 +91,16 @@
     }
     #nav-title{
       display: inline-block;
-      width: 200px;
       font-weight: 500;
-      margin-left: 60px;
+      margin-left: 20px;
       margin-top: 20px;
       font-size: 24px;
+    }
+    #status {
+      font-size: 14px;
+      display: inline-block;
+      position: relative;
+      top: -1px;
     }
    
   </style>
@@ -108,7 +113,8 @@
     </div>
     <div id="new-tweets-outer">
       <div id="nav-bar">
-        <div id="nav-title">News Feed</div>
+        <div id="nav-title"> News Feed </div>
+        <div id="status"></div>
         <div class="button" id="live-feed">Live Feed</div>
         <div class="button" id="get-new">Get New Tweets</div>
       </div>
@@ -138,7 +144,7 @@
 
         if (showUserName) {
           tweetElement.on('click', function() {
-          showUserFeed($(this));
+            showUserFeed($(this));
           });
 
           tweetElement.on('mouseenter', function() {
@@ -154,7 +160,7 @@
 
       function addTimeStamp(tweetObj, node) {
         var timeStamp = $('<div class="time-stamp"></div>');
-        timeStamp.text(moment(tweetObj.created_at).fromNow() + ' - ' + tweetObj.created_at);
+        timeStamp.text(moment(tweetObj.created_at).fromNow());
         timeStamp.appendTo(node);
       }
 
@@ -186,15 +192,29 @@
         $('#user-feed-outer').animate({'opacity': '1'}, 'fast');
       }
 
-      $(document).ready(function(){
+      function updateStatus() {
+        var $newest = streams.home[streams.home.length - 1];
+        var $dateStamp = moment($newest.created_at).format('MMMM Do YYYY');
+        var $timeStamp = moment($newest.created_at).format('h:mm:ss a');
+        var status = ' - Updated on ' + $dateStamp + ' at ' + $timeStamp;
+        
+        $('#status').text(status);
 
+
+      }
+
+      $(document).ready(function(){
         var $newFeed = $('#new-tweets-inner');
+      
         appendNewTweets(streams.home.slice(-10), $newFeed, true);
+
+        updateStatus();
 
         $('#get-new').on('click', function() {
           var newestTen = streams.home.slice(-10);
           $newFeed.empty();
           appendNewTweets(newestTen, $newFeed, true);
+          updateStatus();
         });
 
          var tweetLoader = loadLiveTweets($newFeed);
@@ -204,11 +224,13 @@
             clearInterval($(this).data('intervalId'));
             $(this).removeClass('live');
             $(this).css({"color": "#7f7f7f", "background-color": "white"});
+            updateStatus();
           } else {
             var interval = setInterval(tweetLoader, 15);
             $(this).addClass('live');
             $(this).data('intervalId', interval);
             $(this).css({"color": "white", "background-color": "#59bc69"});
+            $('#status').text(' - Live!');
           }
         })
 
