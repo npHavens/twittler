@@ -11,7 +11,7 @@
   <style>
     body {
       font-family: 'Libre Franklin', sans-serif;
-      color: grey;
+      color: #7f7f7f;
       font-size: 18px;
       margin: 0px;
     }
@@ -74,7 +74,7 @@
     }
     .button {
       display: inline-block;
-      color: grey;
+      color: #7f7f7f;
       padding: 13px 20px 0px 20px;
       float: right;
       margin-top: 12px;
@@ -190,8 +190,7 @@
           if ($(this).hasClass('live')) {
             clearInterval($(this).data('intervalId'));
             $(this).removeClass('live');
-            $(this).css({"color": "grey", "background-color": "white"});
-
+            $(this).css({"color": "#7f7f7f", "background-color": "white"});
           } else {
             var interval = setInterval(tweetLoader, 15);
             $(this).addClass('live');
@@ -202,12 +201,11 @@
 
         $('.button').on('mouseenter', function() {
           $(this).animate({'background-color': '#59bc69', 'color': 'white'}, 'fast');
-
         });
 
         $('.button').on('mouseleave', function() {
           if (!$(this).hasClass('live')) {
-            $(this).animate({'background-color': 'white', 'color': '#59bc69'}, 'fast');
+            $(this).animate({'background-color': 'white', 'color': '#7f7f7f'}, 'fast');
           }
         });
 
