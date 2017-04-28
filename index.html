@@ -198,9 +198,7 @@
         var $timeStamp = moment($newest.created_at).format('h:mm:ss a');
         var status = ' - Updated on ' + $dateStamp + ' at ' + $timeStamp;
         
-        $('#status').text(status);
-
-
+        $('#status').css('opacity', '0').text(status).animate({'opacity': '1'});
       }
 
       $(document).ready(function(){
