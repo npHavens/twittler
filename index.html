@@ -20,7 +20,7 @@
       padding-left: 50px;
     }
 
-    #new-tweets-outer, #user-feed-outer {
+    #new-tweets-outer, #user-feed-outer, #user-input {
       display: inline-block;
       width: 50%;
       margin-left: 30px;
@@ -56,7 +56,7 @@
       font-size: 15px;
       vertical-align: top;
     }
-    #user-title {
+    #user-title, #visitor-title {
       margin-top: 18px;
       padding-bottom: 20px;
       text-align: center;
@@ -89,7 +89,7 @@
       cursor: pointer;
       font-weight: 500;
     }
-    #nav-title{
+    #nav-title {
       display: inline-block;
       font-weight: 500;
       margin-left: 20px;
@@ -101,6 +101,13 @@
       display: inline-block;
       position: relative;
       top: -1px;
+    }
+
+    #user-input{
+      width: 20%;
+      height: 300px;
+      font-size: 15px;
+      vertical-align: top;
     }
    
   </style>
@@ -119,6 +126,13 @@
         <div class="button" id="get-new">Get New Tweets</div>
       </div>
       <div id="new-tweets-inner"></div>
+    </div>
+    <div id="user-input">
+      <div id="visitor-title">Create a Tweet!</div>
+      <form>
+        <input id="visitor-tweet" type="text"></input>
+        <input type="submit" id="submit"></input>
+      </form>
     </div>
 
 
@@ -198,7 +212,7 @@
         var $timeStamp = moment($newest.created_at).format('h:mm:ss a');
         var status = ' - Updated on ' + $dateStamp + ' at ' + $timeStamp;
         
-        $('#status').css('opacity', '0').text(status).animate({'opacity': '1'});
+        $('#status').css('opacity', '0').text(status).animate({'opacity': '1'}, 'fast');
       }
 
       $(document).ready(function(){
@@ -228,7 +242,7 @@
             $(this).addClass('live');
             $(this).data('intervalId', interval);
             $(this).css({"color": "white", "background-color": "#59bc69"});
-            $('#status').text(' - Live!');
+            $('#status').css('opacity', '0').text(' - Live!').animate({'opacity': '1'}, 'fast');
           }
         })
 
