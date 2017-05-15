@@ -5,7 +5,7 @@
     <script src="jquery.animate-colors-min.js"></script>
     <script src="data_generator.js"></script>
     <script src="moment.min.js"></script>
-   
+
     <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:100,300,400,500,600,700,800,900" rel="stylesheet">
 
   <style>
@@ -30,7 +30,7 @@
     }
     .tweet {
       padding: 20px 30px 10px 30px;
-      
+
     }
 
     #new-tweets-inner > .tweet {
@@ -46,7 +46,7 @@
       text-align: center;
       margin-left: auto;
       margin-right: auto;
-      
+
       margin-bottom: 20px;
     }
     #user-feed-outer {
@@ -78,7 +78,6 @@
       color: #7f7f7f;
       padding: 10px 20px 0px 20px;
       float: right;
-      margin-top: 12px;
       margin-right: 20px;
       border-radius: 30px;
       height: 30px;
@@ -88,9 +87,10 @@
       border: 2px solid #59bc69;
       cursor: pointer;
       font-weight: 500;
+      margin-top: -25px;
     }
     #nav-title {
-      display: inline-block;
+      display: block;
       font-weight: 500;
       margin-left: 20px;
       margin-top: 20px;
@@ -101,15 +101,30 @@
       display: inline-block;
       position: relative;
       top: -1px;
+      left: 20px;
     }
 
     #user-input{
       width: 20%;
-      height: 300px;
+      height: 250px;
       font-size: 15px;
       vertical-align: top;
     }
-   
+
+    #visitor-tweet {
+      margin-left: 20px;
+      margin-top: 30px;
+      height: 60px;
+      width: 240px;
+
+    }
+    #submit {
+      display: block;
+      margin-left: 20px;
+      margin-top: 5px;
+    }
+
+
   </style>
 
   <header id="title">Twittler</header>
@@ -130,14 +145,14 @@
     <div id="user-input">
       <div id="visitor-title">Create a Tweet!</div>
       <form>
-        <input id="visitor-tweet" type="text"></input>
-        <input type="submit" id="submit"></input>
+        <textarea id="visitor-tweet"></textarea>
+        <div id="submit" class="button">Submit</div>
       </form>
     </div>
 
 
     <script>
-     
+
       function appendNewTweets(stream, node, showUserName) {
         var index = stream.length - 1;
 
@@ -152,7 +167,7 @@
       function buildTweetElement(tweetObj, showUserName) {
         var tweetElement = $('<div class="tweet"></div>')
         .text((showUserName ? '@' + tweetObj.user + ': ' : '') + tweetObj.message)
-        .data("user-name", tweetObj.user)
+        .data("user-name", tweetObj.user);
 
         addTimeStamp(tweetObj, tweetElement);
 
@@ -184,9 +199,9 @@
         return function() {
           if (streams.home.length > length) {
             var newTweetObj = streams.home[streams.home.length - 1];
-            var $lastTweet =  node.find('div:first');           
+            var $lastTweet =  node.find('div:first');
             var $newTweet = buildTweetElement(newTweetObj, true);
-            
+
             $lastTweet.before($newTweet);
             length = streams.home.length;
             node.find('.tweet:last').remove();
@@ -211,13 +226,15 @@
         var $dateStamp = moment($newest.created_at).format('MMMM Do YYYY');
         var $timeStamp = moment($newest.created_at).format('h:mm:ss a');
         var status = ' - Updated on ' + $dateStamp + ' at ' + $timeStamp;
-        
+
         $('#status').css('opacity', '0').text(status).animate({'opacity': '1'}, 'fast');
       }
 
       $(document).ready(function(){
         var $newFeed = $('#new-tweets-inner');
-      
+        window.visitor = 'visitor';
+        window.streams.users.visitor = [];
+
         appendNewTweets(streams.home.slice(-10), $newFeed, true);
 
         updateStatus();
@@ -254,6 +271,11 @@
           if (!$(this).hasClass('live')) {
             $(this).animate({'background-color': 'white', 'color': '#7f7f7f'}, 'fast');
           }
+        });
+
+        $('#submit').on('click', function() {
+          writeTweet($('#visitor-tweet').val());
+          $('#visitor-tweet').val('');
         });
 
 
